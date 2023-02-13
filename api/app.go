@@ -3,14 +3,11 @@ package main
 import (
 	"log"
 	"server/api/database"
+	routes "server/api/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
-
-func setupRoutes(app *fiber.App) {
-	// app.Get("/movements", routes)
-}
 
 func main() {
 	database.ConnectDb()
@@ -18,9 +15,7 @@ func main() {
 		EnablePrintRoutes: true,
 	})
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hola mundo!")
-	})
+	routes.RegisterRoutes(app)
 
 	app.Use(cors.New())
 
@@ -28,7 +23,8 @@ func main() {
 		return c.SendStatus(404)
 	})
 
-	// movementRoute := app.Group("/movements")
-
 	log.Fatal(app.Listen(":8000"))
 }
+
+// https://github.com/gofiber/fiber/issues/270
+// reference for project structure
